@@ -27,10 +27,7 @@ protected:
 		struct FBlackboardKeySelector WaypointKey;
 
 private:
-	TArray<AActor*> GetPatrolPoints(APatrollingGuard* Guard);
-
 	void SetNextWaypoint(int32 Index, TArray<AActor*> PatrolPoints, UBlackboardComponent* BlackboardComp);
 
 	void CycleIndex(int32 Index, TArray<AActor*> PatrolPoints, UBlackboardComponent* BlackboardComp);
-
 };

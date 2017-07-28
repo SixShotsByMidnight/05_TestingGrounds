@@ -20,7 +20,7 @@ public:
 
 	TArray<AActor*> GetPatrolPoints() const;
 
-	UPROPERTY(EditInstanceOnly, Category = "Patrol Route")
+	UPROPERTY(EditAnywhere, Category = "Patrol Route")
 		TArray<AActor*> PatrolPoints = { nullptr }; //TODO should not be public
 
 protected:

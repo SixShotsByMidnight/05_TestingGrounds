@@ -29,7 +29,4 @@ protected:
 
 private:
 
-
-		
-	
 };

@@ -41,30 +41,6 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 
 	// Note: The ProjectileClass and the skeletal mesh/anim blueprints for Mesh1P, FP_Gun, and VR_Gun 
 	// are set in the derived blueprint asset named MyCharacter to avoid direct content references in C++.
-
-	// Create VR Controllers.
-	R_MotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("R_MotionController"));
-	R_MotionController->Hand = EControllerHand::Right;
-	R_MotionController->SetupAttachment(RootComponent);
-	L_MotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("L_MotionController"));
-	L_MotionController->SetupAttachment(RootComponent);
-
-	// Create a gun and attach it to the right-hand VR controller.
-	// Create a gun mesh component
-	VR_Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("VR_Gun"));
-	VR_Gun->SetOnlyOwnerSee(true);			// only the owning player will see this mesh
-	VR_Gun->bCastDynamicShadow = false;
-	VR_Gun->CastShadow = false;
-	VR_Gun->SetupAttachment(R_MotionController);
-	VR_Gun->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
-
-	VR_MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("VR_MuzzleLocation"));
-	VR_MuzzleLocation->SetupAttachment(VR_Gun);
-	VR_MuzzleLocation->SetRelativeLocation(FVector(0.000004, 53.999992, 10.000000));
-	VR_MuzzleLocation->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));		// Counteract the rotation of the VR gun model.
-
-	// Uncomment the following line to turn motion controllers on by default:
-	//bUsingMotionControllers = true;
 }
 
 void AFirstPersonCharacter::BeginPlay()
@@ -73,21 +49,13 @@ void AFirstPersonCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
-	if (Gun == NULL) { return; }
+	if (GunBlueprint == NULL) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Gun is Null"));
+		return;
+	}
 	Gun = GetWorld()->SpawnActor<AGun>(GunBlueprint);
 	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
-
-	// Show or hide the two versions of the gun based on whether or not we're using motion controllers.
-	if (bUsingMotionControllers)
-	{
-		VR_Gun->SetHiddenInGame(false, true);
-		Mesh1P->SetHiddenInGame(true, true);
-	}
-	else
-	{
-		VR_Gun->SetHiddenInGame(true, true);
-		Mesh1P->SetHiddenInGame(false, true);
-	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -107,8 +75,6 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 		//PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AFirstPersonCharacter::OnFire);
 	}
 
-	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AFirstPersonCharacter::OnResetVR);
-
 	PlayerInputComponent->BindAxis("MoveForward", this, &AFirstPersonCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFirstPersonCharacter::MoveRight);
 
@@ -119,11 +85,6 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	PlayerInputComponent->BindAxis("TurnRate", this, &AFirstPersonCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AFirstPersonCharacter::LookUpAtRate);
-}
-
-void AFirstPersonCharacter::OnResetVR()
-{
-	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
 }
 
 void AFirstPersonCharacter::BeginTouch(const ETouchIndex::Type FingerIndex, const FVector Location)

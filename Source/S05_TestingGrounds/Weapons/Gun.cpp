@@ -14,11 +14,11 @@ AGun::AGun()
 
 	// Create a gun mesh component
 	Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Gun"));
-	Gun->SetOnlyOwnerSee(false);			// only the owning player will see this mesh
+	//Gun->SetOnlyOwnerSee(false);			// only the owning player will see this mesh
 	Gun->bCastDynamicShadow = false;
 	Gun->CastShadow = false;
 	//Gun->SetupAttachment(Mesh1P, TEXT("GripPoint"));
-	Gun->SetupAttachment(RootComponent);
+	//Gun->SetupAttachment(RootComponent);
 
 	MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
 	MuzzleLocation->SetupAttachment(Gun);

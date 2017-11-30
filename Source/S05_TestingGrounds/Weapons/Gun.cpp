@@ -45,10 +45,10 @@ void AGun::Tick(float DeltaTime)
 void AGun::OnFire()
 {
 	// try and fire a projectile
-	if (ProjectileClass != NULL)
+	if (ProjectileClass != nullptr)
 	{
 		UWorld* const World = GetWorld();
-		if (World != NULL)
+		if (World != nullptr)
 		{
 			const FRotator SpawnRotation = MuzzleLocation->GetComponentRotation();
 			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
@@ -64,19 +64,21 @@ void AGun::OnFire()
 	}
 
 	// try and play the sound if specified
-	if (FireSound != NULL)
+	if (FireSound != nullptr)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
 	}
 
 
 	// try and play a firing animation if specified
-	if (FireAnimation != NULL)
+	if (TP_FireAnimation != nullptr && TP_AnimInstance != nullptr)
 	{
-		if (AnimInstance != NULL)
-		{
-			AnimInstance->Montage_Play(FireAnimation, 1.f);
-		}
+		TP_AnimInstance->Montage_Play(TP_FireAnimation, 1.f);
+	}
+
+	if (FP_FireAnimation != nullptr && FP_AnimInstance != nullptr)
+	{
+			FP_AnimInstance->Montage_Play(FP_FireAnimation, 1.f);
 	}
 
 }

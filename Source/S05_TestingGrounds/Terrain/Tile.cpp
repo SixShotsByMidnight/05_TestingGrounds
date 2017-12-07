@@ -66,14 +66,6 @@ void ATile::PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint, float Ro
 void ATile::BeginPlay()
 {
 	Super::BeginPlay();
-
-	TActorIterator<AActor> ActorIterator = TActorIterator<AActor>(GetWorld());
-	while (ActorIterator)
-	{
-		AActor* FoundActor = *ActorIterator;
-		UE_LOG(LogTemp, Warning, TEXT("Found Actor: %s"), *FoundActor->GetName())
-		++ActorIterator;
-	}
 }
 
 // Called every frame

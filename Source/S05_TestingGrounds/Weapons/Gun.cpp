@@ -26,6 +26,7 @@ AGun::AGun()
 
 	// Default offset from the character location for projectiles to spawn
 	GunOffset = FVector(100.0f, 0.0f, 10.0f);
+
 }
 
 // Called when the game starts or when spawned

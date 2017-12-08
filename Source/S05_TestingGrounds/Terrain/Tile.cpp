@@ -4,6 +4,7 @@
 #include "Tile.h"
 #include "DrawDebugHelpers.h"
 #include "EngineUtils.h"
+#include "ActorPool.h"
 
 // Sets default values
 ATile::ATile()
@@ -90,4 +91,11 @@ bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 	//FColor ResultColor = HasHit ? FColor::Red : FColor::Green;
 	//DrawDebugCapsule(GetWorld(), GlobalLocation, 0, Radius, FQuat::Identity, ResultColor, true, 100);
 	return !HasHit;
+}
+
+void ATile::SetPool(UActorPool* InPool)
+{
+	NavMeshBoundsVolumePool = InPool;
+
+	UE_LOG(LogTemp, Warning, TEXT("[%s] Setting Pool %s"), *(this->GetName()), *(InPool->GetName()))
 }

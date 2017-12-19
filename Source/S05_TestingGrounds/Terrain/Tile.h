@@ -29,14 +29,9 @@ public:
 	ATile();
 
 	UFUNCTION(BlueprintCallable, Category = "Spawning")
-	void PlaceActors(
-		TSubclassOf<AActor> ToSpawn, 
-		int MinSpawn = 1, 
-		int MaxSpawn = 1, 
-		float Radius = 500, 
-		float MaxScale = 1.f, 
-		float MinScale = 1.f
-	);
+		void PlaceActors(TSubclassOf<AActor> ToSpawn, 	int MinSpawn = 1, int MaxSpawn = 1, float Radius = 500, float MaxScale = 1.f, float MinScale = 1.f);
+	UFUNCTION(BlueprintCallable, Category = "Spawning")
+		void PlaceAIPawns(TSubclassOf<APawn> ToSpawn,	int MinSpawn = 1, int MaxSpawn = 1, float Radius = 500);
 
 protected:
 	// Called when the game starts or when spawned
@@ -55,14 +50,19 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Bounds Pool")
-	void SetPool(UActorPool* Pool);
+		void SetPool(UActorPool* Pool);
 
 private:
 	AActor* NavMeshBoundsVolume;
 
 	bool FindEmptyLocation(FVector& OutLocation, float Radius);
 
+	template<class T>
+	void RandomlyPlaceActors(TSubclassOf<T> ToSpawn, int MinSpawn = 1, int MaxSpawn = 1, float Radius = 500, float MaxScale = 1.f, float MinScale = 1.f);
+
 	void PlaceActor(TSubclassOf<AActor> ToSpawn, FSpawnPosition SpawnPosition);
+
+	void PlaceActor(TSubclassOf<APawn> ToSpawn, FSpawnPosition SpawnPosition);
 
 	bool CanSpawnAtLocation(FVector Location, float Radius);
 

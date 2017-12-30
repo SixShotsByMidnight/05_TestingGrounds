@@ -12,6 +12,7 @@ AGun::AGun()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	RootComponent = Gun;
 	// Create a gun mesh component
 	Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Gun"));
 	//Gun->SetOnlyOwnerSee(false);			// only the owning player will see this mesh
@@ -26,14 +27,13 @@ AGun::AGun()
 
 	// Default offset from the character location for projectiles to spawn
 	GunOffset = FVector(100.0f, 0.0f, 10.0f);
-
+	
 }
 
 // Called when the game starts or when spawned
 void AGun::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 // Called every frame

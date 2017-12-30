@@ -79,7 +79,6 @@ void ATile::BeginPlay()
 
 void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	UE_LOG(LogTemp, Warning, TEXT(" [%s] EndPlay "), *GetName())
 	Pool->Return(NavMeshBoundsVolume);
 }
 
@@ -108,7 +107,6 @@ bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 void ATile::SetPool(UActorPool* InPool)
 {
 	Pool = InPool;
-	UE_LOG(LogTemp, Warning, TEXT("[%s] Setting Pool %s"), *(this->GetName()), *(InPool->GetName()))
 	PositionNavMeshBoundsVolume();
 }
 
@@ -117,12 +115,10 @@ void ATile::PositionNavMeshBoundsVolume()
 	NavMeshBoundsVolume = Pool->Checkout();
 	if(NavMeshBoundsVolume == nullptr)
 	{
-		UE_LOG(LogTemp, Error, TEXT("[%s] Not enough actors in pool."), *GetName())
 		return;
 	}
 	NavMeshBoundsVolume->SetActorLocation(GetActorLocation() + NavigationBoundsOffset);
 	GetWorld()->GetNavigationSystem()->Build();
-	UE_LOG(LogTemp, Error, TEXT("[%s] Checked out {%s}"), *GetName(), *(NavMeshBoundsVolume->GetName()))
 }
 
 TArray<FSpawnPosition> ATile::RandomSpawnPosition(int MinSpawn, int MaxSpawn, float Radius,  float MaxScale, float MinScale)

@@ -44,10 +44,12 @@ void AMannequin::BeginPlay()
 	if (IsPlayerControlled())
 	{
 		Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+		UE_LOG(LogTemp, Warning, TEXT("%s: Gun Spawned from Player Controlled"),*(this->GetName()));
 	}
 	else
 	{
 		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint_0"));
+		UE_LOG(LogTemp, Warning, TEXT("%s: Gun Spawned from AI Controlled"), *(this->GetName()));
 	}
 
 	Gun->FP_AnimInstance = Mesh1P->GetAnimInstance();
@@ -57,6 +59,9 @@ void AMannequin::BeginPlay()
 	{
 		InputComponent->BindAction("Fire", IE_Pressed, this, &AMannequin::PullTrigger);
 	}
+
+	//initialize Trigger Pulled Timer
+	TriggerPulledTime = GetWorld()->GetTimeSeconds();
 }
 
 // Called every frame
@@ -76,15 +81,18 @@ void AMannequin::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 void AMannequin::UnPossessed()
 {
 	Super::UnPossessed();
-	if (Gun == nullptr)
+	if (Gun != nullptr)
 	{
-		Gun = GetWorld()->SpawnActor<AGun>(GunBlueprint);
+		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint_0"));
 	}
-	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint_0"));
+
 }
 
 void AMannequin::PullTrigger()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Trigger Pulled"));
-	Gun->OnFire();
+	if (FMath::Abs(GetWorld()->GetTimeSeconds() - TriggerPulledTime) >= 0.25f)  //TODO Make FireRate UPROPERTY on AGun Class
+	{
+		TriggerPulledTime = GetWorld()->GetTimeSeconds();
+		Gun->OnFire();
+	}
 }

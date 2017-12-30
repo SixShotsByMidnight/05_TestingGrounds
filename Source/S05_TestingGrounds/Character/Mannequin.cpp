@@ -90,7 +90,7 @@ void AMannequin::UnPossessed()
 
 void AMannequin::PullTrigger()
 {
-	if (FMath::Abs(GetWorld()->GetTimeSeconds() - TriggerPulledTime) >= 0.25f)  //TODO Make FireRate UPROPERTY on AGun Class
+	if (FMath::Abs(GetWorld()->GetTimeSeconds() - TriggerPulledTime) >= 0.2f)  //TODO Make FireRate UPROPERTY on AGun Class
 	{
 		TriggerPulledTime = GetWorld()->GetTimeSeconds();
 		Gun->OnFire();
